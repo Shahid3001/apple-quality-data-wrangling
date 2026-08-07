@@ -1,0 +1,153 @@
+#Data Wrangling I Practical using apple_quality.csv
+
+# Import required libraries
+
+import pandas as pd
+import numpy as np
+from sklearn.preprocessing import MinMaxScaler
+
+
+# Load the dataset
+
+df = pd.read_csv("apple_quality.csv")
+
+
+# Display first 5 records
+
+print("First 5 Records:")
+print(df.head())
+
+
+# Display last 5 records
+
+print("\nLast 5 Records:")
+print(df.tail())
+
+
+# Check dimensions of dataset
+
+print("\nShape of Dataset:")
+print(df.shape)
+
+
+# Check number of dimensions
+
+print("\nNumber of Dimensions:")
+print(df.ndim)
+
+
+# Display column names
+
+print("\nColumn Names:")
+print(df.columns)
+
+
+# Display basic dataset information
+
+print("\nDataset Information:")
+print(df.info())
+
+
+# Check missing values
+
+print("\nMissing Values:")
+print(df.isnull())
+
+
+# Count total missing values
+
+print("\nTotal Missing Values:")
+print(df.isnull().sum())
+
+
+# Display statistical summary
+
+print("\nStatistical Summary:")
+print(df.describe())
+
+
+# Display data types of columns
+
+print("\nData Types:")
+print(df.dtypes)
+
+
+# Convert Acidity column into numeric datatype
+
+df['Acidity'] = pd.to_numeric(df['Acidity'], errors='coerce')
+
+
+# Check missing values again after conversion
+
+print("\nMissing Values After Type Conversion:")
+print(df.isnull().sum())
+
+
+# Fill missing numerical values using mean
+
+df['Acidity'] = df['Acidity'].fillna(df['Acidity'].mean())
+
+
+# Display updated data types
+
+print("\nUpdated Data Types:")
+print(df.dtypes)
+
+
+# Convert categorical column into category datatype
+
+df['Quality'] = df['Quality'].astype('category')
+
+
+# Convert categorical variable into quantitative variable
+
+quality_dummy = pd.get_dummies(df['Quality'], prefix='Quality')
+
+
+# Concatenate dummy variables with original dataframe
+
+df = pd.concat([df, quality_dummy], axis=1)
+
+
+# Display updated dataframe
+
+print("\nDataset After Converting Categorical Variable:")
+print(df.head())
+
+
+# Select numerical columns for normalization
+
+numerical_columns = [
+    'Size',
+    'Weight',
+    'Sweetness',
+    'Crunchiness',
+    'Juiciness',
+    'Ripeness',
+    'Acidity'
+]
+
+
+# Apply normalization using MinMaxScaler
+
+scaler = MinMaxScaler()
+
+df[numerical_columns] = scaler.fit_transform(df[numerical_columns])
+
+
+# Display normalized data
+
+print("\nNormalized Dataset:")
+print(df[numerical_columns].head())
+
+
+# Final dataset information
+
+print("\nFinal Dataset Shape:")
+print(df.shape)
+
+
+# Display final processed dataset
+
+print("\nFinal Dataset Preview:")
+print(df.head())
